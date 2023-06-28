@@ -16,10 +16,10 @@ either express or implied. See the License for the specific language governing
 permissions and limitations under the License.
 -->
 
-<html lang="en" ng-app="aws-js-s3-explorer">
+<html lang="pt" ng-app="aws-js-s3-explorer">
 
 <head>
-    <title>Amazon S3 Explorer (v2 alpha)</title>
+    <title>UNISEC S3 Explorer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="https://aws.amazon.com/favicon.ico">
@@ -43,15 +43,15 @@ permissions and limitations under the License.
                     <fieldset>
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">S3 Explorer: Settings</h4>
+                            <h4 class="modal-title">S3 Arquivos: Configurações</h4>
                         </div>
                         <div class="modal-body">
                             <div class="col-md-18">
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <p><b>Bucket</b>: Please indicate which region and S3 bucket you want to explore.</p>
+                                        <p><b>Bucket</b>: Por favor, indique qual região e balde S3 você deseja explorar.</p>
                                         <div class="input-group bottom-marg-10">
-                                            <span class="input-group-addon">Region</span>
+                                            <span class="input-group-addon">Região</span>
                                             <select name="region" class="form-control" ng-model="settings.region">
                                                 <option value="ap-south-1">Asia Pacific (Mumbai)</option>
                                                 <option value="ap-northeast-3">Asia Pacific (Osaka-Local)</option>
@@ -65,7 +65,7 @@ permissions and limitations under the License.
                                                 <option value="eu-west-2">EU (London)</option>
                                                 <option value="eu-west-3">EU (Paris)</option>
                                                 <option value="eu-north-1">EU (Stockholm)</option>
-                                                <option value="sa-east-1">South America (São Paulo)</option>
+                                                <option value="sa-east-1">América do Sul (São Paulo)</option>
                                                 <option value="">US East (N. Virginia)</option>
                                                 <option value="us-east-2">US East (Ohio)</option>
                                                 <option value="us-west-1">US West (N. California)</option>
@@ -77,58 +77,58 @@ permissions and limitations under the License.
                                             <select name="bucketlist" class="form-control" ng-model="settings.selected_bucket" placeholder="bucket" ng-required="buckets.length">
                                                 <!-- <option value="" disabled selected>Select a bucket ...</option> -->
                                                 <option ng-repeat="bucket in settings.buckets" value="{{bucket}}">{{bucket}}</option>
-                                                <option value="">Other ...</option>
+                                                <option value="">Outros ...</option>
                                             </select>
                                         </div>
                                         <div class="input-group bottom-marg-10" ng-hide="settings.buckets.length && settings.selected_bucket!=''">
                                             <span class="input-group-addon">Bucket</span>
                                             <input name="bucket" ng-model="settings.entered_bucket" type="text" class="form-control" placeholder="bucket" ng-required="!buckets.length"/>
                                         </div>
-                                        <p><b>Authentication</b>: Please provide any credentials needed to access the bucket.</p>
+                                        <p><b>Autenticação</b>: Forneça as credenciais necessárias para acessar o bucket.</p>
                                         <div class="input-group bottom-marg-10">
-                                            <span class="input-group-addon">Authentication</span>
+                                            <span class="input-group-addon">Autenticação</span>
                                             <select name="county" class="form-control" ng-model="settings.auth" required>
-                                                <option value="anon">Public Bucket (no authentication needed)</option>
-                                                <option value="auth">Private Bucket (I have AWS credentials)</option>
-                                                <option value="temp">Private Bucket (I have temporary AWS credentials)</option>
+                                                <option value="anon">Público Bucket (Nenhuma autenticação necessária)</option>
+                                                <option value="auth">Privado Bucket (Eu tenho credenciais da AWS)</option>
+                                                <option value="temp">Privado Bucket (Eu tenho credenciais temporárias da AWS)</option>
                                             </select>
                                         </div>
-                                        <p ng-hide="settings.auth=='anon'"><b>Credentials</b>: this web page uses the <a href="http://aws.amazon.com/sdk-for-browser/" target="_blank">AWS SDK for JavaScript in the Browser</a>. Your AWS credentials are kept in memory and used by the SDK for authentication. Your secret access key is used to sign API requests but it is <b>not</b> sent to the S3 service.</p>
+                                        <p ng-hide="settings.auth=='anon'"><b>Credenciais</b>: esta página da web usa o <a href="http://aws.amazon.com/sdk-for-browser/" target="_blank">AWS SDK para JavaScript no navegador</a>. Suas credenciais da AWS são mantidas na memória e usadas pelo SDK para autenticação. Sua chave de acesso secreta é usada para assinar solicitações de API, mas é <b>não</b> enviado para o serviço S3.</p>
                                         <div class="input-group bottom-marg-10" ng-hide="settings.auth=='anon'">
-                                            <span class="input-group-addon">Access Key ID</span>
-                                            <input name="accesskey" type="text" ng-model="settings.cred.accessKeyId" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="access key id" required/>
+                                            <span class="input-group-addon">ID da chave de acesso</span>
+                                            <input name="accesskey" type="text" ng-model="settings.cred.accessKeyId" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="id da chave de acesso" required/>
                                         </div>
                                         <div class="input-group bottom-marg-10" ng-hide="settings.auth=='anon'">
-                                            <span class="input-group-addon">Secret Access Key</span>
-                                            <input name="secretkey" type="password" ng-model="settings.cred.secretAccessKey" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="secret access key" required/>
+                                            <span class="input-group-addon">Chave de acesso secreta</span>
+                                            <input name="secretkey" type="password" ng-model="settings.cred.secretAccessKey" class="form-control" ng-disabled="settings.auth=='anon'" placeholder="chave de acesso secreta" required/>
                                         </div>
                                         <div class="input-group bottom-marg-10" ng-show="settings.auth=='temp'">
-                                            <span class="input-group-addon">Session Token</span>
-                                            <input name="token" type="text" ng-model="settings.cred.sessionToken" class="form-control" ng-disabled="settings.auth!='temp'" placeholder="session token" required/>
+                                            <span class="input-group-addon">Token de Sessão</span>
+                                            <input name="token" type="text" ng-model="settings.cred.sessionToken" class="form-control" ng-disabled="settings.auth!='temp'" placeholder="token de sessão" required/>
                                         </div>
                                         <div class="input-group bottom-marg-10" ng-show="settings.auth=='auth'">
-                                            <span class="input-group-addon">Multi-Factor</span>
+                                            <span class="input-group-addon">Multifator</span>
                                             <select name="county" class="form-control" ng-model="settings.mfa.use" required>
-                                                <option value="no">No (I do not need to provide an MFA code)</option>
-                                                <option value="yes">Yes (I need to provide an MFA code)</option>
+                                                <option value="no">Não (não preciso fornecer um código MFA)</option>
+                                                <option value="yes">Sim (preciso fornecer um código MFA)</option>
                                             </select>
                                         </div>
                                         <div class="input-group bottom-marg-10" ng-show="settings.mfa.use=='yes'">
-                                            <span class="input-group-addon">MFA Code</span>
-                                            <input name="token" type="text" ng-model="settings.mfa.code" class="form-control" ng-disabled="settings.mfa.use=='no'" placeholder="MFA code" required/>
+                                            <span class="input-group-addon">Código MFA</span>
+                                            <input name="token" type="text" ng-model="settings.mfa.code" class="form-control" ng-disabled="settings.mfa.use=='no'" placeholder="código MFA" required/>
                                         </div>
-                                        <p><b>Options</b>: S3 Explorer can show your S3 bucket contents folder-by-folder or it can show
-                                        a flat view of the entire bucket. Also, if you want to start in a folder that is not the root folder then enter the initial prefix below, for example <i>songs/</i>.</p>
+                                        <p><b>Opções</b>: S3 O Explorer pode mostrar o conteúdo do bucket S3 pasta por pasta ou pode mostrar
+                                        uma visão plana de todo o balde. Além disso, se você deseja iniciar em uma pasta que não seja a pasta raiz, insira o prefixo inicial abaixo, por exemplo <i>músicas/</i>.</p>
                                         <div class="input-group bottom-marg-10">
-                                            <span class="input-group-addon">Initial View</span>
+                                            <span class="input-group-addon">Visualização Inicial</span>
                                             <select name="view" class="form-control" ng-model="settings.delimiter" required>
-                                                <option value="/">Folder (shows folder-by-folder)</option>
-                                                <option value="">Bucket (shows entire bucket contents)</option>
+                                                <option value="/">Pasta (mostra pasta por pasta)</option>
+                                                <option value="">Bucket (mostra todo o conteúdo do bucket)</option>
                                             </select>
                                         </div>
                                         <div class="input-group bottom-marg-10">
-                                            <span class="input-group-addon">Initial Prefix</span>
-                                            <input name="prefix" type="text" ng-model="settings.prefix" class="form-control" placeholder="prefix e.g. songs/"/>
+                                            <span class="input-group-addon">Prefixo Inicial</span>
+                                            <input name="prefix" type="text" ng-model="settings.prefix" class="form-control" placeholder="prefixo, por exemplo músicas/"/>
                                         </div>
                                     </div>
                                 </div>
@@ -137,8 +137,8 @@ permissions and limitations under the License.
                         <div class="modal-footer">
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary"><i class='fa fa-cloud-download-alt fa-lg'></i>&nbsp;Query S3</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary"><i class='fa fa-cloud-download-alt fa-lg'></i>&nbsp;Consulta S3</button>
                                 </div>
                             </div>
                         </div>
@@ -156,18 +156,18 @@ permissions and limitations under the License.
                     <fieldset>
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">S3 Explorer: New Folder</h4>
+                            <h4 class="modal-title">S3 Explorer: Nova Pasta</h4>
                         </div>
                         <div class="modal-body">
                             <div class="col-md-18">
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <p>Please enter the relative path of the S3 folder to add, for example folder-01 or wallpaper/animals/dogs</p>
+                                        <p>Insira o caminho relativo da pasta S3 a ser adicionada, por exemplo, pasta-01 ou papel de parede/animais/cachorros</p>
                                         <div class="input-group bottom-marg-10">
                                             <span class="input-group-addon">{{add_folder.view_prefix}}</span>
-                                            <input name="folder" ng-model="add_folder.entered_folder" type="text" class="form-control" placeholder="folder" ng-required="true"/>
+                                            <input name="folder" ng-model="add_folder.entered_folder" type="text" class="form-control" placeholder="pasta" ng-required="true"/>
                                         </div>
-                                        <p>The new S3 folder will be {{add_folder.view_prefix}}{{add_folder.entered_folder}}.</p>
+                                        <p>A nova pasta S3 será {{add_folder.view_prefix}}{{add_folder.entered_folder}}.</p>
                                     </div>
                                 </div>
                             </div>
@@ -175,8 +175,8 @@ permissions and limitations under the License.
                         <div class="modal-footer">
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary"><i class='fa fa-folder-plus fa-lg'></i>&nbsp;Add Folder</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary"><i class='fa fa-folder-plus fa-lg'></i>&nbsp;Criar Pasta</button>
                                 </div>
                             </div>
                         </div>
@@ -192,45 +192,44 @@ permissions and limitations under the License.
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">S3 Explorer: Information</h4>
+                    <h4 class="modal-title">S3 Explorer: Informação</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-18">
                         <ul class="nav nav-tabs" data-tabs="tabs">
-                            <li role="presentation" class="active"><a href="#about" data-toggle="tab">About</a></li>
+                            <li role="presentation" class="active"><a href="#about" data-toggle="tab">Sobre</a></li>
                             <li role="presentation"><a href="#cors" ng-hide="!info.bucket || !info.cors" data-toggle="tab">CORS</a></li>
-                            <li role="presentation"><a href="#policy" ng-hide="!info.bucket || !info.policy" data-toggle="tab">Bucket Policy</a></li>
-                            <li role="presentation"><a href="#corsref" data-toggle="tab">CORS Reference</a></li>
-                            <li role="presentation"><a href="#policyref" data-toggle="tab">Policy Reference</a></li>
+                            <li role="presentation"><a href="#policy" ng-hide="!info.bucket || !info.policy" data-toggle="tab">Política do Bucket</a></li>
+                            <li role="presentation"><a href="#corsref" data-toggle="tab">CORS Referência</a></li>
+                            <li role="presentation"><a href="#policyref" data-toggle="tab">Política do Referência</a></li>
                         </ul>
                         <div id="my-tab-content" class="tab-content">
                             <div class="tab-pane active" id="about">
                                 <br/>
-                                <p>Amazon S3 Explorer is an application that uses the AWS JavaScript SDK in the Browser to make the contents of an S3 bucket easy to view in a web browser.</p>
-                                <p>To upload files, first navigate to the bucket &amp; folder of your choice and then drag &amp; drop files onto the main S3 Explorer table.</p>
-                                <p>To delete files, first choose the files you want to delete by clicking checkboxes in the Select column, then click the Trash icon. You will be asked to confirm this action.</p>
-                                <p>For more details and to download the source code, see our <a target="_blank" href="https://github.com/awslabs/aws-js-s3-explorer">GitHub page</a>.</p>
+                                <p>O Amazon S3 Explorer é um aplicativo que usa o AWS JavaScript SDK no navegador para facilitar a visualização do conteúdo de um bucket do S3 em um navegador da web.</p>
+                                <p>Para fazer upload de arquivos, primeiro navegue até o bucket &amp; pasta de sua escolha e arraste &amp; solte arquivos na tabela principal do S3 Explorer.</p>
+                                <p>Para excluir arquivos, primeiro escolha os arquivos que deseja excluir clicando nas caixas de seleção na coluna Selecionar e, em seguida, clique no ícone Lixeira. Você será solicitado a confirmar esta ação.</p>
+                                <p>Para mais detalhes e para baixar o código-fonte, consulte nosso <a target="_blank" href="https://github.com/awslabs/aws-js-s3-explorer">GitHub página</a>.</p>
                             </div>
                             <div class="tab-pane" id="cors" ng-hide="!info.cors">
                                 <br/>
-                                <p>The currently-configured CORS Configuration for {{info.bucket}} is below.</p>
+                                <p>A configuração CORS atualmente configurada para {{info.bucket}} está abaixo.</p>
                                 <pre><span id="info-cors"></span></pre>
                             </div>
                             <div class="tab-pane" id="policy" ng-hide="!info.policy">
                                 <br/>
-                                <p>The currently-configured Bucket Policy for {{info.bucket}} is below.</p>
+                                <p>A política de bucket atualmente configurada para {{info.bucket}} está abaixo.</p>
                                 <pre><span id="info-policy"></span></pre>
                             </div>
                             <div class="tab-pane" id="corsref">
                                 <br/>
 <p>
-JavaScript in the browser cannot display the contents of an Amazon S3 bucket unless the bucket has the proper cross-origin resource sharing (CORS) configuration.
+    O JavaScript no navegador não pode exibir o conteúdo de um bucket do Amazon S3, a menos que o bucket tenha a configuração apropriada de compartilhamento de recursos entre origens (CORS).</p>
+<p>
+    Para configurar o CORS, você cria uma configuração CORS que identifica as origens permitidas para acessar seu bucket e as operações (métodos HTTP) suportadas.
 </p>
 <p>
-To configure CORS, you create a CORS configuration that identifies the origins allowed to access your bucket and the operations (HTTP methods) supported.
-</p>
-<p>
-To do this, select your bucket in the buckets panel of the Amazon S3 Console and click to reveal Permissions in the Properties pane. Click Edit CORS Configuration. The CORS Configuration Editor panel will open up with a field where you can enter a CORS Configuration. Enter a configuration similar to the following:
+    Para fazer isso, selecione seu bucket no painel de buckets do Amazon S3 Console e clique para revelar Permissions no painel Properties. Clique em Editar configuração do CORS. O painel CORS Configuration Editor será aberto com um campo onde você pode inserir uma configuração CORS. Insira uma configuração semelhante à seguinte:
 </p>
                                     <p>
 <pre>
@@ -250,14 +249,14 @@ To do this, select your bucket in the buckets panel of the Amazon S3 Console and
 &lt;/CORSConfiguration&gt;
 </pre>
 <p>
-Please see the project <a target="_blank" href="https://github.com/awslabs/aws-js-s3-explorer/blob/v2-alpha/README.md">README</a> for more specific details on how to create an appropriate CORS configuration.
+Por favor, veja o projeto <a target="_blank" href="https://github.com/awslabs/aws-js-s3-explorer/blob/v2-alpha/README.md">README</a> para obter detalhes mais específicos sobre como criar uma configuração CORS apropriada.
 </p>
 
                                     </p>
                                 </div>
                                 <div class="tab-pane" id="policyref">
                                     <br/>
-                                    <p>Here is a sample S3 bucket policy that you can use. Change <i>999999999999</i> to your AWS account number and change <i>mybucket</i> to your bucket name.</p>
+                                    <p>Aqui está um exemplo de política de bucket do S3 que você pode usar. Mudar <i>999999999999</i> para o número da sua conta da AWS e altere <i>meubucket</i> para o nome do seu balde.</p>
                                     <p>
 <pre>
 {
@@ -274,7 +273,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
 }
 </pre>
 <p>
-Please see the project <a target="_blank" href="https://github.com/awslabs/aws-js-s3-explorer/blob/v2-alpha/README.md">README</a> for more specific details on how to create an appropriate S3 bucket policy.
+Por favor, veja o projeto <a target="_blank" href="https://github.com/awslabs/aws-js-s3-explorer/blob/v2-alpha/README.md">README</a> para obter detalhes mais específicos sobre como criar uma política de bucket S3 apropriada.
 </p>
                                         </p>
                             </div>
@@ -284,7 +283,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                 <div class="modal-footer">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                         </div>
                     </div>
                 </div>
@@ -298,13 +297,13 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">S3 Explorer: Delete {{trash.count}} objects</h4>
+                    <h4 class="modal-title">S3 Explorer: Deletar {{trash.count}} objetos</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-18">
                         <div class="panel-body">
                             <p>
-                            Please confirm that you want to delete the following objects from S3.
+                            Confirme que deseja excluir os seguintes objetos do S3.
                             </p>
                             <br/>
                             <table class="table table-bordered table-hover table-striped" id="trash-table">
@@ -312,12 +311,12 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                                     <tr>
                                         <th></th>
                                         <th>Object</th>
-                                        <th>Folder</th>
-                                        <th>Last Modified</th>
+                                        <th>Pasta</th>
+                                        <th>Última modificação</th>
                                         <th>Timestamp</th>
-                                        <th>Class</th>
-                                        <th>Size</th>
-                                        <th>Result</th>
+                                        <th>Classe</th>
+                                        <th>Tamanho</th>
+                                        <th>Resultado</th>
                                     </tr>
                                 </thead>
                                 <tbody id="trash-tbody">
@@ -339,7 +338,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                 <div class="modal-footer">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button id="trash-btn-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button id="trash-btn-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                             <button id="trash-btn-delete" type="submit" class="btn btn-danger" ng-disabled="trash.trashing"><i class="fa fa-trash-alt fa-lg"></i>&nbsp;{{trash.button}}</button>
                         </div>
                     </div>
@@ -354,20 +353,20 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">S3 Explorer: Error ({{error.code}})</h4>
+                    <h4 class="modal-title">S3 Explorer: Erro ({{error.code}})</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-18">
                         <div class="panel-body">
-                            <p>An error was detected: {{error.message}}</p>
+                            <p>Um erro foi detectado: {{error.message}}</p>
                             <div class="collapse" id="collapseAdvanced">
                                 <div class="well-sm">
                                     <table class="table table-bordered table-hover table-striped" id="error-table">
                                         <thead id="error-thead">
                                             <tr>
                                                 <th>#</th>
-                                                <th>Key</th>
-                                                <th>Value</th>
+                                                <th>Chave</th>
+                                                <th>Valor</th>
                                             </tr>
                                         </thead>
                                         <tbody id="error-tbody">
@@ -386,8 +385,8 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                 <div class="modal-footer">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced"><i class="fa fa-cog" aria-hidden="true">&nbsp;</i>Advanced</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced"><i class="fa fa-cog" aria-hidden="true">&nbsp;</i>Avançado</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                         </div>
                     </div>
                 </div>
@@ -396,7 +395,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
     </div>
 
     <!-- Hidden selector for adding files -->
-    <input id="addedFiles" type="file" ng-hide="true" multiple/>
+    <input id="addedFiles" type="file" ng-hide="true" multiple  accept=".png"/>
 
     <!-- Upload modal -->
     <div id="UploadModal" class="modal fade" ng-controller="UploadController" tabindex="-1">
@@ -404,22 +403,22 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Upload to:&nbsp;{{upload.title}}</h4>
+                    <h4 class="modal-title">Carregar para:&nbsp;{{upload.title}}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-18">
                         <div class="panel-body">
                             <p>
-                            Please confirm that you want to upload the following files to S3.
+                            Por favor, confirme que você deseja carregar os seguintes arquivos para o S3.
                             </p>
                             <table class="table table-bordered table-hover table-striped" id="upload-table">
                                 <thead id="upload-thead">
                                     <tr>
                                         <th></th>
-                                        <th>Filename</th>
-                                        <th>Type</th>
-                                        <th>Size</th>
-                                        <th>Progress</th>
+                                        <th>Nome do arquivo</th>
+                                        <th>Tipo</th>
+                                        <th>Tamanho</th>
+                                        <th>Progresso</th>
                                     </tr>
                                 </thead>
                                 <tbody id="upload-tbody">
@@ -435,7 +434,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                                 </tbody>
                             </table>
                             <p>
-                            The selected files will be uploaded to {{upload.title}}
+                            Os arquivos selecionados serão enviados para {{upload.title}}
                             </p>
                         </div>
                     </div>
@@ -444,7 +443,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                             <!-- <button id="upload-btn-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button> -->
-                            <button id="upload-btn-cancel" type="button" class="btn btn-default">Cancel</button>
+                            <button id="upload-btn-cancel" type="button" class="btn btn-default">Cancelar</button>
                             <button id="upload-btn-upload" type="submit" class="btn btn-primary" ng-disabled="upload.uploading"><i class="fa fa-cloud-upload-alt fa-lg"></i>&nbsp;{{upload.button}}</button>
                         </div>
                     </div>
@@ -466,7 +465,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                         <div class="btn-group pull-left">
                             <!-- Utility name -->
                             <div class="title pull-left">
-                                Amazon S3 Explorer (v2 alpha)&nbsp;
+                                UNISEC S3 Explorer&nbsp;
                             </div>
                             <!-- Bucket breadcrumbs -->
                             <div class="pull-right" ng-hide="!view.settings">
@@ -496,7 +495,7 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                                 </div>
                                 <!-- Record/checked count -->
                                 <div class="btn-group" ng-hide="!view.settings || view.keys_selected.length == 0">
-                                    <span id="badgecount" style="cursor: default;" class="btn badge pull-right" title="Selected object count">{{view.keys_selected.length}} of {{view.objectCount}}</span>
+                                    <span id="badgecount" style="cursor: default;" class="btn badge pull-right" title="Selected object count">{{view.keys_selected.length}} do {{view.objectCount}}</span>
                                 </div>
                             </div>
                         </div>
@@ -507,13 +506,13 @@ Please see the project <a target="_blank" href="https://github.com/awslabs/aws-j
                         <table class="table table-bordered table-hover table-striped" style="width:100%" id="s3objects-table">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Select</th>
-                                    <th>Object</th>
-                                    <th>Folder</th>
-                                    <th>Last Modified</th>
+                                    <th class="text-center">Selecione</th>
+                                    <th>Objeto</th>
+                                    <th>Pasta</th>
+                                    <th>Última modificação</th>
                                     <th>Timestamp</th>
-                                    <th>Class</th>
-                                    <th>Size</th>
+                                    <th>Classe</th>
+                                    <th>Tamanho</th>
                                 </tr>
                             </thead>
                             <tbody id="s3objects-tbody"></tbody>
